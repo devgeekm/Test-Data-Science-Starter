@@ -64,39 +64,37 @@
         border: 2px solid #1A946F;
     </style>
   </head>
-  <body>
+<body>
     <div class="container">
-      <!-- Inicio del formulario, los resultados se enviarán a la ruta "/resultados" -->
-      <form id="quiz-form" action="/resultados" method="post">
-        <!-- Introducción -->
-        <div class="intro active" id="intro">
-          <h1>Test de Afinidad para Ciencia de Datos</h1>
-          <p>Este test te ayudará a descubrir tu afinidad para alguna de las disciplinas con la ciencia de datos.</p>
-          <button type="button" onclick="startTest()">Iniciar Test</button>
-        </div>
-        <!-- Iteramos sobre cada pregunta en la lista de preguntas -->
-        {% for pregunta in preguntas %}
-        <div class="form-group mb-3" id="pregunta{{ loop.index }}">
-          <!-- Mostramos el texto de la pregunta -->
-          <label class="form-label">{{ pregunta.texto }}</label>
-          <!-- Creamos un menú desplegable para las opciones de la pregunta actual -->
-          <select class="form-select" name="pregunta{{ loop.index }}" onchange="nextQuestion({{ loop.index }})">
-            <!-- Agregamos una opción vacía al principio que no esté seleccionada por defecto -->
-            <option value="" selected disabled hidden>Selecciona una opción</option>
-            <!-- Iteramos sobre cada opción en la pregunta actual -->
-            {% for opcion, detalles in pregunta.opciones.items() %}
-            <!-- Creamos una opción en el menú desplegable para la opción actual.
+        <!-- Inicio del formulario, los resultados se enviarán a la ruta "/resultados" -->
+        <form id="quiz-form" action="/resultados" method="post">
+            <!-- Introducción -->
+            <div class="intro active" id="intro">
+              <h1>Test de Afinidad para Ciencia de Datos</h1>
+              <p>Este test te ayudará a descubrir tu afinidad para alguna de las disciplinas con la ciencia de datos.</p>
+              <button type="button" onclick="startTest()">Iniciar Test</button>
+          </div>
+            <!-- Iteramos sobre cada pregunta en la lista de preguntas -->
+            {% for pregunta in preguntas %}
+            <div class="form-group mb-3" id="pregunta{{ loop.index }}">
+                <!-- Mostramos el texto de la pregunta -->
+                <label class="form-label">{{ pregunta.texto }}</label>
+                <!-- Creamos un menú desplegable para las opciones de la pregunta actual -->
+                <select class="form-select" name="pregunta{{ loop.index }}" onchange="nextQuestion({{ loop.index }})">
+                    <!-- Agregamos una opción vacía al principio que no esté seleccionada por defecto -->
+                    <option value="" selected disabled hidden>Selecciona una opción</option>
+                    <!-- Iteramos sobre cada opción en la pregunta actual -->
+                    {% for opcion, detalles in pregunta.opciones.items() %}
+                    <!-- Creamos una opción en el menú desplegable para la opción actual.
                              El valor de la opción es el identificador de la opción. -->
-            <option value="{{ opcion }}">{{ opcion }}. {{ detalles.texto }}</option>
+                    <option value="{{ opcion }}">{{ opcion }}. {{ detalles.texto }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             {% endfor %}
-          </select>
-        </div>
-        {% endfor %}
-        <!-- Botón para enviar el formulario -->
-        <button type="submit" class="btn btn-primary mt-3 mb-4" id="submit-button" style="display: none">
-          Enviar respuestas
-        </button>
-      </form>
+            <!-- Botón para enviar el formulario -->
+            <button type="submit" class="btn btn-primary mt-3 mb-4" id="submit-button" style="display: none;">Enviar respuestas</button>
+        </form>
     </div>
 
     <!-- Bootstrap JS y dependencias opcionales -->
@@ -114,25 +112,25 @@
     <script>
       // Función para mostrar la siguiente pregunta
       function nextQuestion(index) {
-        document.getElementById("pregunta" + index).classList.remove("active");
-        var nextQuestion = document.getElementById("pregunta" + (index + 1));
+        document.getElementById('pregunta' + index).classList.remove('active');
+        var nextQuestion = document.getElementById('pregunta' + (index + 1));
         if (nextQuestion) {
-          nextQuestion.classList.add("active");
+          nextQuestion.classList.add('active');
         } else {
-          document.getElementById("submit-button").style.display = "block";
+          document.getElementById('submit-button').style.display = 'block';
         }
       }
 
       // Función para iniciar el test
       function startTest() {
-        document.getElementById("intro").classList.remove("active");
-        document.getElementById("pregunta1").classList.add("active");
+        document.getElementById('intro').classList.remove('active');
+        document.getElementById('pregunta1').classList.add('active');
       }
 
       // Mostrar la introducción al cargar la página
-      window.onload = function () {
-        document.getElementById("intro").classList.add("active");
-      };
+      window.onload = function() {
+        document.getElementById('intro').classList.add('active');
+      }
     </script>
   </body>
 </html>
