@@ -13,18 +13,30 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import inspect
 
 def create_app():
+    """
+    Crea y configura la aplicación Flask.
+
+    Returns:
+        app: La aplicación Flask configurada.
+    """
     app = Flask(__name__)
+    # Configura la base de datos SQLite
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+    # Inicializa SQLAlchemy con la aplicación
     db.init_app(app)
+    # Configura las migraciones de Flask con la aplicación y la base de datos
     migrate = Migrate(app, db)
 
     with app.app_context():
+        # Inspecciona la base de datos para ver si la tabla 'resultado' existe
         inspector = inspect(db.engine)
         if 'resultado' not in inspector.get_table_names():
+            # Si la tabla 'resultado' no existe, crea todas las tablas
             db.create_all()
 
     return app
 
+# Crea la aplicación Flask
 app = create_app()
 
 # Preguntas y puntajes para cada disciplina
