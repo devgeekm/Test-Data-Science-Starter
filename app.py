@@ -11,6 +11,7 @@ from collections import Counter
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import inspect
+import os
 
 def create_app():
     """
@@ -28,10 +29,8 @@ def create_app():
     migrate = Migrate(app, db)
 
     with app.app_context():
-        # Inspecciona la base de datos para ver si la tabla 'resultado' existe
-        inspector = inspect(db.engine)
-        if 'resultado' not in inspector.get_table_names():
-            # Si la tabla 'resultado' no existe, crea todas las tablas
+        # Verifica si la base de datos ya existe antes de intentar crearla
+        if not os.path.exists('test.db'):
             db.create_all()
 
     return app
