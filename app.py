@@ -12,30 +12,23 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import inspect
 import os
+from dotenv import load_dotenv
+
+# Carga las variables de entorno desde el archivo .env
+load_dotenv()
 
 def create_app():
-    """
-    Crea y configura la aplicación Flask.
-
-    Returns:
-        app: La aplicación Flask configurada.
-    """
     app = Flask(__name__)
-    # Configura la base de datos SQLite
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-    # Inicializa SQLAlchemy con la aplicación
+    # Usa la variable de entorno DATABASE_URL para la cadena de conexión de la base de datos
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     db.init_app(app)
-    # Configura las migraciones de Flask con la aplicación y la base de datos
     migrate = Migrate(app, db)
 
     with app.app_context():
-        # Verifica si la base de datos ya existe antes de intentar crearla
-        if not os.path.exists('test.db'):
-            db.create_all()
+        db.create_all()
 
     return app
 
-# Crea la aplicación Flask
 app = create_app()
 
 # Preguntas y puntajes para cada disciplina
@@ -46,7 +39,7 @@ preguntas = [
             "a": {"texto": "Con instrucciones precisas", "puntajes": {"estadistica": 4, "aprendizaje_automatico": 2, "analisis_de_datos": 2}},
             "b": {"texto": "Resolviendo acertijos", "puntajes": {"estadistica": 2, "aprendizaje_automatico": 4, "analisis_de_datos": 2}},
             "c": {"texto": "Explorando información", "puntajes": {"estadistica": 2, "aprendizaje_automatico": 2, "analisis_de_datos": 4}},
-            "d": {"texto": "De forma creativa", "puntajes": {"estadistica": 1, "aprendizaje_automatico": 1, "analisis_de_datos": 2}}
+            "d": {"texto": "De forma creativa", "puntajes": {"estadistica": 1, "aprendizaje_automatico": 1, "analisis_de_datos": 4}}
         }
     },
     {
@@ -55,7 +48,7 @@ preguntas = [
             "a": {"texto": "Planificar cada detalle minuciosamente para asegurarme de que todo salga perfecto", "puntajes": {"estadistica": 4, "aprendizaje_automatico": 2, "analisis_de_datos": 2}},
             "b": {"texto": "Dejar que una aplicación o programa se encargue de organizar todo automáticamente", "puntajes": {"estadistica": 2, "aprendizaje_automatico": 4, "analisis_de_datos": 2}},
             "c": {"texto": "Improvisar y ajustar los planes según vaya avanzando la organización", "puntajes": {"estadistica": 2, "aprendizaje_automatico": 2, "analisis_de_datos": 4}},
-            "d": {"texto": "Hacer un plan general y luego ir explorando nuevas ideas creativas", "puntajes": {"estadistica": 1, "aprendizaje_automatico": 1, "analisis_de_datos": 3}}
+            "d": {"texto": "Hacer un plan general y luego ir explorando nuevas ideas creativas", "puntajes": {"estadistica": 1, "aprendizaje_automatico": 1, "analisis_de_datos": 4}}
         }
     },
     {
@@ -64,7 +57,7 @@ preguntas = [
         "a": {"texto": "Analizarlos para entender mejor mis patrones de comportamiento", "puntajes": {"estadistica": 4, "aprendizaje_automatico": 2, "analisis_de_datos": 2}},
         "b": {"texto": "Usarlos para predecir tendencias futuras en mis actividades", "puntajes": {"estadistica": 2, "aprendizaje_automatico": 4, "analisis_de_datos": 2}},
         "c": {"texto": "Visualizarlos para ver gráficamente cómo varían mis hábitos con el tiempo", "puntajes": {"estadistica": 2, "aprendizaje_automatico": 2, "analisis_de_datos": 4}},
-        "d": {"texto": "Utilizarlos para contar historias sobre mi vida y mis decisiones diarias", "puntajes": {"estadistica": 1, "aprendizaje_automatico": 1, "analisis_de_datos": 3}}
+        "d": {"texto": "Utilizarlos para contar historias sobre mi vida y mis decisiones diarias", "puntajes": {"estadistica": 1, "aprendizaje_automatico": 1, "analisis_de_datos": 4}}
     }
     },
     {
@@ -73,7 +66,7 @@ preguntas = [
             "a": {"texto": "Seguir meticulosamente una receta paso a paso", "puntajes": {"estadistica": 4, "aprendizaje_automatico": 2, "analisis_de_datos": 1}},
             "b": {"texto": "Usar una aplicación que te guíe en cada paso del proceso", "puntajes": {"estadistica": 2, "aprendizaje_automatico": 4, "analisis_de_datos": 2}},
             "c": {"texto": "Improvisar con los ingredientes y ajustar la receta según tu intuición", "puntajes": {"estadistica": 2, "aprendizaje_automatico": 2, "analisis_de_datos": 4}},
-            "d": {"texto": "Experimentar con diferentes técnicas y sabores para crear algo nuevo", "puntajes": {"estadistica": 1, "aprendizaje_automatico": 1, "analisis_de_datos": 3}}
+            "d": {"texto": "Experimentar con diferentes técnicas y sabores para crear algo nuevo", "puntajes": {"estadistica": 1, "aprendizaje_automatico": 1, "analisis_de_datos": 4}}
         }
     },
     {
@@ -99,7 +92,7 @@ preguntas = [
         "opciones": {
             "a": {"texto": "Mostrarle muchas imágenes de gatos y perros y decirle cuál es cuál", "puntajes": {"estadistica": 2, "aprendizaje_automatico": 4, "analisis_de_datos": 2}},
             "b": {"texto": "Programar un algoritmo que analice los colores de la imagen", "puntajes": {"estadistica": 3, "aprendizaje_automatico": 2, "analisis_de_datos": 3}},
-            "c": {"texto": "Decirle a la computadora que adivine", "puntajes": {"estadistica": 1, "aprendizaje_automatico": 1, "analisis_de_datos": 3}},
+            "c": {"texto": "Decirle a la computadora que adivine", "puntajes": {"estadistica": 1, "aprendizaje_automatico": 1, "analisis_de_datos": 4}},
             "d": {"texto": "No tengo idea", "puntajes": {"estadistica": 1, "aprendizaje_automatico": 1, "analisis_de_datos": 1}}
         }
     },
@@ -135,7 +128,7 @@ preguntas = [
         "opciones": {
             "a": {"texto": "Medirías la altura de cada uno y calcularías la media", "puntajes": {"estadistica": 4, "aprendizaje_automatico": 2, "analisis_de_datos": 2}},
             "b": {"texto": "Adivinarías", "puntajes": {"estadistica": 2, "aprendizaje_automatico": 4, "analisis_de_datos": 2}},
-            "c": {"texto": "No me importaría saberlo", "puntajes": {"estadistica": 2, "aprendizaje_automatico": 2, "analisis_de_datos": 2}},
+            "c": {"texto": "No me importaría saberlo", "puntajes": {"estadistica": 2, "aprendizaje_automatico": 2, "analisis_de_datos": 3}},
             "d": {"texto": "No estoy seguro", "puntajes": {"estadistica": 1, "aprendizaje_automatico": 1, "analisis_de_datos": 1}}
     }
     },
