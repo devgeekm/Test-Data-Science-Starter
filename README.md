@@ -25,8 +25,12 @@ pip install -r requirements.txt
 Para usar este script, simplemente ejecuta el siguiente comando en tu terminal:
 
 ```bash
-python test.py
+python run.py
 ```
+
+## URL del Proyecto
+
+Puedes acceder al proyecto en la siguiente URL: <a href="https://testdatascience.azurewebsites.net/" target="_blank">Test Data Science Starter</a>
 
 ## Contribuir
 
