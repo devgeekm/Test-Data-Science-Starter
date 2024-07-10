@@ -55,7 +55,7 @@ def register():
             logger.error(f"Error en el registro: {e}")
             flash('Ocurrió un error en el registro. Por favor, inténtelo de nuevo más tarde.', 'danger')
     
-    return render_template('/register.html', title='Registro', form=form)
+    return render_template('register.html', title='Registro', form=form)
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -70,7 +70,7 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('main.menu'))
         else:
             flash('Login fallido. Por favor, verifica tu email y contraseña', 'danger')
-    return render_template('/login.html', title='Login', form=form)
+    return render_template('login.html', title='Login', form=form)
 
 @bp.route('/logout')
 def logout():
@@ -95,7 +95,7 @@ def profile():
     elif request.method == 'GET':
         form.first_name.data = current_user.first_name
         form.last_name.data = current_user.last_name
-    return render_template('/profile.html', title='Perfil', form=form)
+    return render_template('profile.html', title='Perfil', form=form)
 
 @bp.route('/delete_account', methods=['POST'])
 @login_required
