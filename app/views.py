@@ -16,6 +16,11 @@ from sqlalchemy import inspect
 from sqlalchemy.exc import DatabaseError
 import os
 import time
+import logging
+
+# Configurar el registro de errores
+logging.basicConfig(level=logging.ERROR)
+logger = logging.getLogger(__name__)
 
 bp = Blueprint('main', __name__)
 
@@ -26,32 +31,30 @@ def home():
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
-    # Redirigir a la página principal si el usuario ya está autenticado
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     
     form = RegistrationForm()
     
-    # Validar el formulario al enviarlo
     if form.validate_on_submit():
-        # Verificar si el nombre de usuario o el correo electrónico ya existen en la base de datos
-        existing_user = Usuario.query.filter(
-            (Usuario.username == form.username.data) | (Usuario.email == form.email.data)
-        ).first()
-        
-        if existing_user:
-            # Mostrar un mensaje de error si el usuario ya existe
-            flash('El nombre de usuario o el correo electrónico ya están en uso. Por favor, elige otros.', 'danger')
-        else:
-            # Crear un nuevo usuario si no existe
-            user = Usuario(username=form.username.data, email=form.email.data)
-            user.set_password(form.password.data)
-            db.session.add(user)
-            db.session.commit()
-            flash('Tu cuenta ha sido creada exitosamente!', 'success')
-            return redirect(url_for('main.login'))
+        try:
+            existing_user = Usuario.query.filter(
+                (Usuario.username == form.username.data) | (Usuario.email == form.email.data)
+            ).first()
+            
+            if existing_user:
+                flash('El nombre de usuario o el correo electrónico ya están en uso. Por favor, elige otros.', 'danger')
+            else:
+                user = Usuario(username=form.username.data, email=form.email.data)
+                user.set_password(form.password.data)
+                db.session.add(user)
+                db.session.commit()
+                flash('Tu cuenta ha sido creada exitosamente!', 'success')
+                return redirect(url_for('main.login'))
+        except Exception as e:
+            logger.error(f"Error en el registro: {e}")
+            flash('Ocurrió un error en el registro. Por favor, inténtelo de nuevo más tarde.', 'danger')
     
-    # Renderizar la plantilla de registro con el formulario
     return render_template('register.html', title='Registro', form=form)
 
 @bp.route('/login', methods=['GET', 'POST'])
