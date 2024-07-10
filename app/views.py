@@ -27,7 +27,7 @@ bp = Blueprint('main', __name__)
 @bp.route('/')
 @bp.route('/home')
 def home():
-    return render_template('/app/templates/home.html')
+    return render_template('home.html')
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -55,7 +55,7 @@ def register():
             logger.error(f"Error en el registro: {e}")
             flash('Ocurrió un error en el registro. Por favor, inténtelo de nuevo más tarde.', 'danger')
     
-    return render_template('/app/templates/register.html', title='Registro', form=form)
+    return render_template('/register.html', title='Registro', form=form)
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -70,7 +70,7 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('main.menu'))
         else:
             flash('Login fallido. Por favor, verifica tu email y contraseña', 'danger')
-    return render_template('/app/templates/login.html', title='Login', form=form)
+    return render_template('/login.html', title='Login', form=form)
 
 @bp.route('/logout')
 def logout():
@@ -80,7 +80,7 @@ def logout():
 @bp.route('/menu')
 @login_required
 def menu():
-    return render_template('/app/templates/menu.html', title='Menu')
+    return render_template('menu.html', title='Menu')
 
 @bp.route('/profile', methods=['GET', 'POST'])
 @login_required
@@ -95,7 +95,7 @@ def profile():
     elif request.method == 'GET':
         form.first_name.data = current_user.first_name
         form.last_name.data = current_user.last_name
-    return render_template('/app/templates/profile.html', title='Perfil', form=form)
+    return render_template('/profile.html', title='Perfil', form=form)
 
 @bp.route('/delete_account', methods=['POST'])
 @login_required
@@ -112,7 +112,7 @@ def delete_account():
 @login_required
 def inteligencia_emocional_form():
     # Aquí puedes añadir la lógica para el formulario de Inteligencia Emocional
-    return render_template('/app/templates/inteligencia_emocional.html', title='Formulario de Inteligencia Emocional')
+    return render_template('inteligencia_emocional.html', title='Formulario de Inteligencia Emocional')
 
 
 @bp.route('/ciencia-datos')
@@ -130,15 +130,15 @@ def ciencia_datos_form():
         current_app.logger.info(f"Preguntas cargadas: {preguntas}")
         
         # Renderizar la plantilla con las preguntas
-        return render_template('/app/templates/ciencia-datos.html', title='Test de Ciencia de Datos', preguntas=preguntas)
+        return render_template('ciencia-datos.html', title='Test de Ciencia de Datos', preguntas=preguntas)
     
     except FileNotFoundError:
         current_app.logger.error(f"No se pudo encontrar el archivo JSON en {ruta_json}")
-        return render_template('/app/templates/error.html', message="No se pudo cargar el test. Por favor, inténtelo más tarde."), 500
+        return render_template('error.html', message="No se pudo cargar el test. Por favor, inténtelo más tarde."), 500
     
     except json.JSONDecodeError:
         current_app.logger.error(f"Error al decodificar el archivo JSON en {ruta_json}")
-        return render_template('/app/templates/error.html', message="Hubo un problema al cargar el test. Por favor, inténtelo más tarde."), 500
+        return render_template('error.html', message="Hubo un problema al cargar el test. Por favor, inténtelo más tarde."), 500
 
 
 # Función para obtener respuestas del usuario
@@ -249,7 +249,7 @@ def resultados():
 
         current_app.logger.info(f"Resultado guardado exitosamente: {nuevo_resultado}")
 
-        return render_template('/app/templates/resultados.html', 
+        return render_template('resultados.html', 
                                disciplina=disciplina, 
                                grafica=grafica, 
                                puntaje=puntaje_maximo,
@@ -258,7 +258,7 @@ def resultados():
     except Exception as e:
         db.session.rollback()
         current_app.logger.error(f"Error al procesar resultados: {str(e)}")
-        return render_template('/app/templates/error.html', message="Ocurrió un error al procesar los resultados. Por favor, inténtelo más tarde."), 500
+        return render_template('error.html', message="Ocurrió un error al procesar los resultados. Por favor, inténtelo más tarde."), 500
 
 
 # Ruta para mostrar las estadísticas de los resultados    
@@ -278,4 +278,4 @@ def estadisticas():
     plt.savefig(img, format='png', facecolor=fig.get_facecolor())
     img.seek(0)
     img_str = base64.b64encode(img.read()).decode('utf-8')
-    return render_template('/app/templates/estadisticas.html', img_str=img_str, total_personas=total_personas)
+    return render_template('estadisticas.html', img_str=img_str, total_personas=total_personas)
